@@ -10,8 +10,8 @@ import { LoginComponent } from './components/login/login.component';
 //Crea las rutas
 
 const appRoutes: Routes = [
-	{path: '/', component: LoginComponent},
-	{path: '/ingresos', component: IngresoComponent},
+	{path: '', component: LoginComponent},
+	{path: 'ingresos', component: IngresoComponent},
 	{path: '**', component: ErrorComponent}
 ];
 
