@@ -14,18 +14,31 @@ export class IngresoComponent implements OnInit {
 
  	public ingresos: Ingreso[];
 	public url: string;
-  	public load: boolean;
+  public load: boolean;
+  public ingreso: Ingreso;
+  public status: boolean;
+  public savedIngreso: Ingreso;
+  public action_form: number;
 
   constructor(
   	private _ingresoService: IngresoService
   	) { 
   	this.url = Global.url;
     this.load = false;
+    this.status = false;
+
+    this.crearInstancia();
+
+    console.log(this.ingreso._id);
   }
 
   ngOnInit() {
 
   	this.getIngresos();
+
+    this.action_form = 1;
+
+
   }
 
   getIngresos(){
@@ -33,7 +46,7 @@ export class IngresoComponent implements OnInit {
   		response => {
   			console.log(response.ingresos)
   			this.ingresos = response.ingresos
-        	this.load = true;
+        this.load = true;
   		},
 
   		error => {
@@ -41,6 +54,99 @@ export class IngresoComponent implements OnInit {
   		}
 
   	)
+  }
+
+  onSubmit(form){
+
+    if (this.action_form == 1) {
+      this.saveIngreso(form);
+    } else {
+      this.updateIngreso(form);
+    }
+    
+
+  }
+
+  saveIngreso(form){
+    this._ingresoService.saveIngreso(this.ingreso)
+    .subscribe(
+      response => {
+        if (response.ingreso) {
+          this.savedIngreso = response.ingreso;
+          this.status = true;
+          this.action_form = 1;
+          form.reset();
+          this.getIngresos();
+          console.log('Ingreso guardado');
+        } else {
+          this.status = false;
+        }
+      },
+
+      error => {
+        console.log(<any>error);
+      }
+      )
+
+    console.log(this.ingreso._id);
+  }
+
+  updateIngreso(form){
+    this._ingresoService.updateIngreso(this.ingreso)
+    .subscribe(
+      response => {
+        if (response.ingreso) {
+          this.savedIngreso = response.ingreso;
+          this.status = true;
+          this.action_form = 2;
+          //this.getIngresos();
+
+          console.log('Ingreso actualizado');
+        } else {
+          this.status = false;
+        }
+      },
+
+      error => {
+        console.log(<any>error);
+      }
+      )
+  }
+
+  editIngreso(ingreso){
+     this.ingreso = ingreso;
+     this.action_form = 2;
+  }
+
+  deleteIngreso(ingreso){
+    console.log(ingreso)
+    this._ingresoService.deleteIngreso(ingreso._id)
+                .subscribe(
+                  response => {
+                    if (response.ingreso) {
+                      console.log(response.ingreso);
+                      
+                    }
+                  },
+
+                  error => {
+                    console.log(<any>error);
+                  }
+                 );
+        this.getIngresos()
+        this.action_form = 1;
+  }
+
+  crearInstancia(){
+
+    this.ingreso = new Ingreso('', '', '', '');
+  }
+
+  newIngreso(){
+    this.crearInstancia();
+    document.getElementsByTagName('form')[0].reset();
+    this.action_form = 1;
+    console.log('si')
   }
 
 }

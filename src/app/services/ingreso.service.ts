@@ -24,7 +24,7 @@ export class IngresoService{
 		let params = JSON.stringify(ingreso);
 		let headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-		return this._http.post(this.url + 'save-ingreso', params, {headers: headers});
+		return this._http.post(this.url + '/save-ingreso', params, {headers: headers});
 
 	}
 
@@ -32,6 +32,21 @@ export class IngresoService{
 		let headers = new HttpHeaders().set('Content-Type', 'application/json');
 		
 		return this._http.get(this.url + '/ingresos', {headers: headers});
+	}
+
+	updateIngreso(ingreso):Observable<any>{
+
+		let params = JSON.stringify(ingreso);
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+		return this._http.put(this.url + '/ingreso/' + ingreso._id, params, {headers: headers});
+	}
+
+	deleteIngreso(id):Observable<any>{
+		let headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+		return this._http.delete(this.url + '/ingreso/' + id, {headers: headers});
 	}
 
 

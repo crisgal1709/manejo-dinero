@@ -1,1 +1,69 @@
 <h1 class="text-center">Ingresos</h1>
+
+<div class="container-fluid jumbotron text-center col-sm-8 col-sm-offset-2">
+		
+	<form class="form-horizontal" #ingresoForm="ngForm" (ngSubmit)="onSubmit(ingresoForm)">
+		<div class="form-row align-items-center">
+
+			<input type="hidden" value=""  name="_id" #_id="ngModel" [(ngModel)]="ingreso._id">
+
+			<div class="col-auto">
+				<label class="sr-only" for="inlineFormInput">Fecha</label>
+				<input type="text" class="form-control mb-2" id="fecha" name="fecha" placeholder="Fecha" #fecha="ngModel" [(ngModel)]="ingreso.fecha">
+			</div>
+			<div class="col-auto">
+				<label class="sr-only" for="inlineFormInputGroup">Monto</label>
+				<div class="input-group mb-2">
+					<input type="text" name="monto" class="form-control" id="inlineFormInputGroup" placeholder="Monto" #monto="ngModel" [(ngModel)]="ingreso.monto">
+				</div>
+			</div>
+
+			<div class="col-auto">
+				<label class="sr-only" for="inlineFormInputGroup">Observaciones</label>
+				<div class="input-group mb-2">
+					<textarea name="observaciones" class="form-control" id="inlineFormInputGroup" placeholder="Observaciones" #observaciones="ngModel" [(ngModel)]="ingreso.observaciones" style="resize: none"></textarea>
+				</div>
+			</div>
+
+			<div class="col-auto">
+				<button type="submit" class="btn btn-primary mb-2">Guardar</button>
+			</div>
+		</div>
+	</form>
+
+	<a class="btn btn-success" (click)="newIngreso()">Nuevo</a>
+
+</div>
+
+
+<div class="container-fluid">
+	<div class="table-responsive">
+		<table class="table table-condensed table-striped">
+			<thead>
+				<tr>
+					<th>Fecha</th>
+					<th>Monto</th>
+					<th>Observaciones</th>
+					<th></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr *ngFor="let ingreso of ingresos" class="ingreso">
+					<td>{{ingreso.fecha}}</td>
+					<td>{{ingreso.monto}}</td>
+					<td>{{ingreso.observaciones}}</td>
+					<td>
+						<a  class="btn btn-warning btn-xs" (click)="editIngreso(ingreso)">
+							<i class="fa fa-edit"></i>
+						</a>
+
+						<a style="margin-left: 2px" (click)="deleteIngreso(ingreso)" class="btn btn-danger btn-xs">
+							<i class="fa fa-remove"></i>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
