@@ -16,16 +16,21 @@ export class IngresoComponent implements OnInit {
 	public url: string;
   public load: boolean;
   public ingreso: Ingreso;
-  public status: boolean;
   public savedIngreso: Ingreso;
   public action_form: number;
+
+  public saved:   boolean;
+  public updated: boolean;
+  public deleted: boolean;
 
   constructor(
   	private _ingresoService: IngresoService
   	) { 
   	this.url = Global.url;
     this.load = false;
-    this.status = false;
+    this.saved = false;
+    this.updated = false;
+    this.deleted = false;
 
     this.crearInstancia();
 
@@ -73,13 +78,15 @@ export class IngresoComponent implements OnInit {
       response => {
         if (response.ingreso) {
           this.savedIngreso = response.ingreso;
-          this.status = true;
+          this.saved = true;
+          this.updated = false;
+          this.deleted = false;
           this.action_form = 1;
           form.reset();
           this.getIngresos();
           console.log('Ingreso guardado');
         } else {
-          this.status = false;
+          this.saved = false;
         }
       },
 
@@ -97,13 +104,14 @@ export class IngresoComponent implements OnInit {
       response => {
         if (response.ingreso) {
           this.savedIngreso = response.ingreso;
-          this.status = true;
           this.action_form = 2;
-          //this.getIngresos();
+          this.updated = true;
+          this.saved = false;
+          this.deleted = false;
 
           console.log('Ingreso actualizado');
         } else {
-          this.status = false;
+          this.updated = false;
         }
       },
 
@@ -125,12 +133,16 @@ export class IngresoComponent implements OnInit {
                   response => {
                     if (response.ingreso) {
                       console.log(response.ingreso);
+                      this.deleted = true;
+                      this.saved = false;
+                      this.updated = false;
                       
                     }
                   },
 
                   error => {
                     console.log(<any>error);
+                    this.deleted = false;
                   }
                  );
         this.getIngresos()
@@ -146,7 +158,9 @@ export class IngresoComponent implements OnInit {
     this.crearInstancia();
     document.getElementsByTagName('form')[0].reset();
     this.action_form = 1;
-    console.log('si')
+    this.saved = false;
+    this.updated = false;
+    this.deleted = false;
   }
 
 }
